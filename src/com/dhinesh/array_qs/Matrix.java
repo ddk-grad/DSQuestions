@@ -42,11 +42,45 @@ public class Matrix {
 		return answer;
 	}
 	
+	//Laplace's expansion n! running time, using LU decomposition we can do it in n^3
+	public static int determinant(int[][] matrix) {
+		if(matrix.length == 1) {
+			return matrix[0][0];
+		} else if(matrix.length == 2){
+			return matrix[0][0]*matrix[1][1] - matrix[0][1]*matrix[1][0];
+		} else {
+			int value = 0;
+			int[] sign = {1, -1};
+			for(int i=0; i<matrix[0].length; i++) {
+				value += sign[i%2] * matrix[0][i] *determinant(submatrix(matrix, i));
+			}
+			return value;
+		}
+	}
+	
+	private static int[][] submatrix(int[][] matrix, int column) {
+		int[][] resultMatrix = new int[matrix.length-1][matrix.length - 1];
+		for(int i=0, r=1; r < matrix.length; r++,i++) {
+			for(int j=0, c=0; c < matrix[i].length; c++,j++) {
+				if(c == column) {
+					j--;
+				} else {
+					resultMatrix[i][j] = matrix[r][c];
+				}
+			}
+		}
+		return resultMatrix;
+	}
+	
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		printMatrix(addition(new int[][]{{1,2},{3,4}}, new int[][]{{5,6},{7,8}}));
-		System.out.println("Multiplication");
-		printMatrix(multiplication(new int[][]{{1,2},{3,4}}, new int[][]{{5,6},{7,8}}));
+//		printMatrix(addition(new int[][]{{1,2},{3,4}}, new int[][]{{5,6},{7,8}}));
+//		System.out.println("Multiplication");
+//		printMatrix(multiplication(new int[][]{{1,2},{3,4}}, new int[][]{{5,6},{7,8}}));
+//		
+		//System.out.println(determinant(new int[][]{{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16}}));
+		printMatrix(transpose(new int[][]{{1,2,3,4},{5,6,7,8}}));
 		
 	}
 	
@@ -56,6 +90,17 @@ public class Matrix {
 			matrix[i] = new int[columns];
 		}
 		return matrix;
+	}
+	
+	public static int[][] transpose(int[][] matrix) {
+		int[][] resultMatrix = new int[matrix[0].length][];
+		for(int c=0; c < matrix[0].length; c++) {
+			resultMatrix[c] = new int[matrix.length];
+			for(int r=0; r < matrix.length; r++) {
+				resultMatrix[c][r] =  matrix[r][c];
+			}
+		}
+		return resultMatrix;
 	}
 	
 	public static void printMatrix(int[][] matrix) {
