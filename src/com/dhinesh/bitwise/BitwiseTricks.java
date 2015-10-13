@@ -28,13 +28,37 @@ public class BitwiseTricks {
 	}
 	
 	public static String baseAddition(String a, String b, int base) {
-		StringBuilder sb = new StringBuilder();
-		//To be continued
-		return null;
+		int remainder = 0;
+		StringBuilder builder = new StringBuilder();
+		int aIndex = a.length()-1, bIndex = b.length()-1;
+		while( aIndex >= 0 && bIndex >= 0) {
+			int sum = a.charAt(aIndex)-48 + b.charAt(bIndex)-48 + remainder;
+			builder.append(sum%base);
+			remainder = sum / base;
+			aIndex--;
+			bIndex--;
+		}
+		while( aIndex >= 0) {
+				int sum = a.charAt(aIndex)-48 + remainder;
+				builder.append(sum%base);
+				remainder = sum / base;
+				aIndex--;
+		}
+		while( bIndex >= 0) {
+				int sum = b.charAt(bIndex)-48 + remainder;
+				builder.append(sum%base);
+				remainder = sum / base;
+				bIndex--;
+		}
+		
+		builder.append(remainder);
+		
+		return builder.reverse().toString();
 	}
 
 	public static void main(String[] args) {
 		System.out.println(countBits(Integer.MAX_VALUE));
 		System.out.println(multiplyby7(5));
+		System.out.println(baseAddition("123", "213", 4));
 	}
 }
